@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: service1
+          uri: http://localhost:9090
+
+          predicates:
+            - Path=/service/**
+
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 4
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
